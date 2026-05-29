@@ -380,7 +380,7 @@ function exportAsPDF() {
         filename:     `Velvera_Certificate_${certID}_${student.replace(/\s+/g, '_')}.pdf`,
         image:        { type: 'jpeg', quality: 1.0 },
         html2canvas:  { 
-            scale: 5, // Extremely high resolution scale for crisp text
+            scale: 3, // Reduced from 5 to 3 to prevent mobile browser memory limit crashes
             useCORS: true, 
             letterRendering: true,
             scrollY: 0,
@@ -450,7 +450,7 @@ function exportAsPNG() {
     els.certCard.style.transform = 'scale(1)';
     
     html2canvas(els.certCard, {
-        scale: 4,
+        scale: 3, // Safe limit for mobile
         useCORS: true,
         scrollY: 0,
         scrollX: 0,
@@ -701,7 +701,7 @@ async function processBulkCertificates() {
             margin:       0,
             filename:     `Velvera_Cert_${uniqueID}_${student.name.replace(/\s+/g, '_')}.pdf`,
             image:        { type: 'jpeg', quality: 1.0 },
-            html2canvas:  { scale: 4, useCORS: true, letterRendering: true },
+            html2canvas:  { scale: 3, useCORS: true, letterRendering: true },
             jsPDF:        { unit: 'mm', format: 'a4', orientation: 'landscape' }
         };
         
