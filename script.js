@@ -380,9 +380,13 @@ function exportAsPDF() {
         filename:     `Velvera_Certificate_${certID}_${student.replace(/\s+/g, '_')}.pdf`,
         image:        { type: 'jpeg', quality: 1.0 },
         html2canvas:  { 
-            scale: 3, // Reduced from 5 to 3 to prevent mobile browser memory limit crashes
+            scale: 4, // High resolution scale
             useCORS: true, 
             letterRendering: true,
+            width: 1123,
+            height: 794,
+            windowWidth: 1123,
+            windowHeight: 794,
             scrollY: 0,
             scrollX: 0,
             backgroundColor: els.certTheme.value === 'dark' ? '#111115' : '#faf9f6',
@@ -390,7 +394,9 @@ function exportAsPDF() {
                 // Safely modify the virtual cloned document for perfect rendering without affecting the live UI
                 const clonedCard = clonedDoc.getElementById('certificate-to-print');
                 if (clonedCard) {
-                    clonedCard.style.transform = 'scale(1)';
+                    clonedCard.style.transform = 'none'; // Remove any zoom scale
+                    clonedCard.style.width = '1123px';
+                    clonedCard.style.height = '794px';
                     clonedCard.style.margin = '0';
                     clonedCard.style.position = 'absolute';
                     clonedCard.style.top = '0';
@@ -422,17 +428,11 @@ function exportAsPDF() {
     
     showToast("Generating PDF, please wait...");
     
-    // CRITICAL FIX: Reset scaling on original element before capturing so bounding box isn't clipped
-    const originalTransform = els.certCard.style.transform;
-    els.certCard.style.transform = 'scale(1)';
-    
-    // Run HTML to PDF conversion
+    // Run HTML to PDF conversion using the original element (without breaking live view)
     html2pdf().set(opt).from(els.certCard).save().then(() => {
-        els.certCard.style.transform = originalTransform;
         showToast("PDF Certificate downloaded successfully!");
         generateAndSave();
     }).catch(err => {
-        els.certCard.style.transform = originalTransform;
         console.error("PDF generation failed", err);
         showToast("Error generating PDF. Try again.");
     });
@@ -445,20 +445,22 @@ function exportAsPNG() {
     
     showToast("Generating PNG, please wait...");
     
-    // CRITICAL FIX: Reset scaling on original element before capturing
-    const originalTransform = els.certCard.style.transform;
-    els.certCard.style.transform = 'scale(1)';
-    
     html2canvas(els.certCard, {
-        scale: 3, // Safe limit for mobile
+        scale: 4, // High quality scale
         useCORS: true,
+        width: 1123,
+        height: 794,
+        windowWidth: 1123,
+        windowHeight: 794,
         scrollY: 0,
         scrollX: 0,
         backgroundColor: els.certTheme.value === 'dark' ? '#111115' : '#faf9f6',
         onclone: function(clonedDoc) {
             const clonedCard = clonedDoc.getElementById('certificate-to-print');
             if (clonedCard) {
-                clonedCard.style.transform = 'scale(1)';
+                clonedCard.style.transform = 'none';
+                clonedCard.style.width = '1123px';
+                clonedCard.style.height = '794px';
                 clonedCard.style.margin = '0';
                 clonedCard.style.position = 'absolute';
                 clonedCard.style.top = '0';
@@ -485,8 +487,6 @@ function exportAsPNG() {
             if (clonedPreview) clonedPreview.style.overflow = 'visible';
         }
     }).then(canvas => {
-        els.certCard.style.transform = originalTransform;
-        
         const link = document.createElement('a');
         link.download = `Velvera_Certificate_${certID}_${student.replace(/\s+/g, '_')}.png`;
         link.href = canvas.toDataURL('image/png');
@@ -495,7 +495,6 @@ function exportAsPNG() {
         showToast("PNG Certificate exported successfully!");
         generateAndSave();
     }).catch(err => {
-        els.certCard.style.transform = originalTransform;
         console.error("PNG export failed", err);
         showToast("Error exporting PNG image.");
     });
@@ -694,22 +693,33 @@ async function processBulkCertificates() {
         saveCertificate(certObj);
         
         // PDF Export config
-        const originalTransform = els.certCard.style.transform;
-        els.certCard.style.transform = 'scale(1)';
-        
         const opt = {
             margin:       0,
             filename:     `Velvera_Cert_${uniqueID}_${student.name.replace(/\s+/g, '_')}.pdf`,
             image:        { type: 'jpeg', quality: 1.0 },
-            html2canvas:  { scale: 3, useCORS: true, letterRendering: true },
+            html2canvas:  { 
+                scale: 4, 
+                useCORS: true, 
+                letterRendering: true,
+                width: 1123,
+                height: 794,
+                windowWidth: 1123,
+                windowHeight: 794,
+                onclone: function(clonedDoc) {
+                    const clonedCard = clonedDoc.getElementById('certificate-to-print');
+                    if (clonedCard) {
+                        clonedCard.style.transform = 'none';
+                        clonedCard.style.width = '1123px';
+                        clonedCard.style.height = '794px';
+                    }
+                }
+            },
             jsPDF:        { unit: 'mm', format: 'a4', orientation: 'landscape' }
         };
         
         // Wait for PDF to generate and download
         await new Promise((resolve) => {
             html2pdf().set(opt).from(els.certCard).save().then(() => {
-                els.certCard.style.transform = originalTransform;
-                
                 statusSpan.className = "bulk-status done";
                 statusSpan.textContent = "Done";
                 statusSpan.style.background = "rgba(16, 185, 129, 0.15)";
@@ -718,7 +728,6 @@ async function processBulkCertificates() {
                 resolve();
             }).catch(err => {
                 console.error("PDF generation failed in batch", err);
-                els.certCard.style.transform = originalTransform;
                 statusSpan.className = "bulk-status pending";
                 statusSpan.textContent = "Failed";
                 statusSpan.style.background = "rgba(239, 68, 68, 0.15)";
