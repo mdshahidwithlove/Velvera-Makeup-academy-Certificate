@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Velvéra Makeup Academy - Professional Certificate Generator</title>
+
+    <!-- Premium Stylesheet -->
+    <link rel="stylesheet" href="styles.css?v=2">
+
+    <!-- Library CDNs for PDF, Image and QR Code generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+</head>
+
+<body>
+
+    <!-- Header Navigation -->
+    <header>
+        <div class="logo-container">
+
+            <div class="velvera-logo-header" style="align-items: flex-start; margin-left: 2px;">
+                <span class="logo-text-full-header">Velvéra MAKEUP ACADEMY</span>
+            </div>
+        </div>
+        <div class="nav-actions">
+            <a href="verify.html" class="badge-link" target="_blank">
+                <!-- Lock Shield Icon -->
+                <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+                    <path
+                        d="M8 .5c-.662 0-1.224.227-1.638.616C5.94 1.51 5.6 2.052 5.513 2.7l-.045.342c-.033.245-.251.424-.497.391-.246-.034-.425-.252-.391-.497l.044-.343C4.753 1.708 5.21 1.01 5.86.398 6.476-.18 7.238-.5 8-.5s1.524.32 2.14.898c.65.612 1.107 1.31 1.233 2.204l.044.343c.034.245-.145.463-.39.497-.247.033-.465-.146-.498-.391l-.045-.342c-.087-.648-.427-1.19-.849-1.584C9.224.727 8.662.5 8 .5zm0 5a2 2 0 1 0 0 4 2 2 0 0 0 0-4z" />
+                    <path
+                        d="M2 9a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9zm2-1a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1H4z" />
+                </svg>
+                Public Verification Portal
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Workspace Container -->
+    <div class="app-container">
+
+        <!-- Left Column: Admin Control Sidebar -->
+        <aside class="sidebar">
+
+            <!-- Generation Mode Tabs -->
+            <div class="tab-container">
+                <button id="tab-single" class="tab-btn active" onclick="switchTab('single')">
+                    <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
+                    </svg>
+                    Single Mode
+                </button>
+                <button id="tab-bulk" class="tab-btn" onclick="switchTab('bulk')">
+                    <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+                        <path
+                            d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1h8zm-7.978-1A.261.261 0 0 1 7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002a.274.274 0 0 1-.014.002H7.022zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM6.936 9.28a5.88 5.88 0 0 0-1.23-.247A7.35 7.35 0 0 0 5 9c-4 0-5 3-5 4 0 .667.333 1 1 1h4.216A2.238 2.238 0 0 1 5 13c0-1.01.377-2.047 1.077-2.83.169-.189.358-.359.564-.512zM2 4.25a2.25 2.25 0 1 1 4.5 0 2.25 2.25 0 0 1-4.5 0z" />
+                    </svg>
+                    Bulk Mode (CSV)
+                </button>
+            </div>
+
+            <!-- TAB 1: Single Certificate Generator Panel -->
+            <div id="panel-single" class="control-panel">
+
+                <!-- Step Indicator -->
+                <div class="wizard-indicator">
+                    <div class="step-dot active" id="step-dot-1">1</div>
+                    <div class="step-line"></div>
+                    <div class="step-dot" id="step-dot-2">2</div>
+                    <div class="step-line"></div>
+                    <div class="step-dot" id="step-dot-3">3</div>
+                </div>
+
+                <!-- STEP 1: Student Details -->
+                <div class="wizard-step active" id="wizard-step-1">
+                    <div class="panel-section">
+                        <h3 class="section-title">
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                <path
+                                    d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Zm.5-5v1.5H14.5a.5.5 0 0 1 0 1H13a.5.5 0 0 1-.5-.5V10a.5.5 0 0 1 1 0Z" />
+                                <path
+                                    d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.732-1.661C11.71 9.61 10.742 9 9 9c-1.743 0-2.71.61-3.268 1.235-.578.675-.73 1.415-.732 1.661h6Z" />
+                            </svg>
+                            Student Details
+                        </h3>
+                        <div class="form-group">
+                            <label for="student-name">Full Name</label>
+                            <input type="text" id="student-name" placeholder="THEEPIREDDY LASYA REDDY"
+                                value="THEEPIREDDY LASYA REDDY">
+                        </div>
+                        <div class="form-group">
+                            <label for="course-select">Select Course</label>
+                            <select id="course-select" onchange="toggleCustomCourse()">
+                                <option value="Professional Makeup and Hair Course">Professional Makeup and Hair Course
+                                </option>
+                                <option value="Professional Bridal Makeup Masterclass">Professional Bridal Makeup
+                                    Masterclass</option>
+                                <option value="Advance Cosmetology & Aesthetic Artistry">Advance Cosmetology & Aesthetic
+                                    Artistry</option>
+                                <option value="HD & Airbrush Makeup Masteristry">HD & Airbrush Makeup Masteristry
+                                </option>
+                                <option value="Self Makeup & Personal Grooming Certification">Self Makeup & Personal
+                                    Grooming Certification</option>
+                                <option value="Professional Hair Styling & Artistry">Professional Hair Styling &
+                                    Artistry</option>
+                                <option value="CUSTOM">Custom Course...</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="custom-course-group" style="display: none;">
+                            <label for="course-custom">Custom Course Title</label>
+                            <input type="text" id="course-custom" placeholder="Diploma in Advance Beautician Studies">
+                        </div>
+                        <div class="input-row">
+                            <div class="form-group">
+                                <label for="cert-grade">Grade / Score (Optional)</label>
+                                <input type="text" id="cert-grade" placeholder="e.g. A+" value="">
+                            </div>
+                            <div class="form-group">
+                                <label for="cert-date">Issue Date</label>
+                                <input type="date" id="cert-date">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wizard-nav">
+                        <div></div>
+                        <button class="btn-primary" onclick="goToStep(2)">Next Step &rarr;</button>
+                    </div>
+                </div>
+
+                <!-- STEP 2: Security & Credentials -->
+                <div class="wizard-step" id="wizard-step-2" style="display: none;">
+                    <div class="panel-section">
+                        <h3 class="section-title">
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                <path
+                                    d="M5.338 1.59a.5.5 0 0 1 .324.614L5.178 3.896c.24.168.496.349.76.541l.732-2.196a.5.5 0 0 1 .949.316l-.68 2.04c.321.267.653.555.992.863l1.196-1.795a.5.5 0 0 1 .832.554l-1.077 1.616c.319.314.636.643.948.984l1.642-1.232a.5.5 0 1 1 .6.8l-1.468 1.101c.29.356.568.727.83 1.11l2.04-.68a.5.5 0 1 1 .316.949l-2.196.732c.192.264.373.52.541.76l1.693-.564a.5.5 0 0 1 .31 1.21L12.5 13H3.5l-1.693 5.079a.5.5 0 0 1-.606-.324l-.564-1.693c-.168-.24-.349-.496-.541-.76L.604 15.351a.5.5 0 1 1-.316-.949l2.04.68c-.262-.383-.54-.754-.83-1.11L.03 12.872a.5.5 0 1 1-.6-.8l1.642 1.232c-.312-.34-.63-.67-.948-.984L-.953 10.704a.5.5 0 0 1-.832-.554l1.196 1.795c-.34-.308-.67-.596-.992-.863L-2.26 8.243a.5.5 0 0 1-.949-.316l.732 2.196c-.264-.192-.52-.373-.76-.541l-.484-1.692a.5.5 0 0 1-.324-.614l.006-.018z" />
+                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                            </svg>
+                            Security & Trust Badges
+                        </h3>
+                        <div class="form-group">
+                            <label for="cert-number">Certificate Number</label>
+                            <div style="display: flex; gap: 8px;">
+                                <input type="text" id="cert-number" style="flex: 1;" placeholder="VMA-2026-0501"
+                                    value="VMA-2026-0501">
+                                <button class="btn-secondary" style="padding: 0 12px;" onclick="regenerateCertID()"
+                                    title="Regenerate ID">
+                                    &#8635;
+                                </button>
+                            </div>
+                        </div>
+                        <div class="toggle-group">
+                            <label for="toggle-iso">ISO 9001:2015 Stamp</label>
+                            <label class="switch">
+                                <input type="checkbox" id="toggle-iso" checked onchange="updateCertificatePreview()">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="toggle-group">
+                            <label for="toggle-accreditation">Accreditation Badges</label>
+                            <label class="switch">
+                                <input type="checkbox" id="toggle-accreditation" checked
+                                    onchange="updateCertificatePreview()">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="wizard-nav">
+                        <button class="btn-secondary" onclick="goToStep(1)">&larr; Back</button>
+                        <button class="btn-primary" onclick="goToStep(3)">Next Step &rarr;</button>
+                    </div>
+                </div>
+
+                <!-- STEP 3: Signatures & Themes -->
+                <div class="wizard-step" id="wizard-step-3" style="display: none;">
+                    <div class="panel-section">
+                        <h3 class="section-title">
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                <path
+                                    d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z" />
+                            </svg>
+                            Signatures & Themes
+                        </h3>
+                        <div class="input-row">
+                            <div class="form-group">
+                                <label for="director-1">Instructor Name</label>
+                                <input type="text" id="director-1" placeholder="Lasya Reddy" value="Lasya Reddy">
+                            </div>
+                            <div class="form-group">
+                                <label for="director-2">Designation</label>
+                                <input type="text" id="director-2" placeholder="Founder & Master Educator"
+                                    value="Founder & Master Educator">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="cert-theme">Certificate Theme</label>
+                            <select id="cert-theme" onchange="changeTheme()">
+                                <option value="light" selected>Royal Ivory & Gold</option>
+                                <option value="dark">Charcoal & Classic Gold</option>
+                                <option value="rose">Luxury Rose Gold & Pink</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Primary Generate Action -->
+                    <button class="btn-primary" onclick="generateAndSave()" style="margin-bottom: 15px;">
+                        <!-- Save Icon -->
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path
+                                d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H9.5a1 1 0 0 0-1 1v4.596L10.354 5.75a.5.5 0 0 1 .708.708l-2.5 2.5a.5.5 0 0 1-.708 0l-2.5-2.5a.5.5 0 1 1 .708-.708L7.5 7.596V2a2 2 0 0 1 2-2H14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h2.5a.5.5 0 0 1 0 1H2z" />
+                        </svg>
+                        Save to Verification Database
+                    </button>
+
+                    <div class="wizard-nav">
+                        <button class="btn-secondary" onclick="goToStep(2)">&larr; Back</button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- TAB 2: Bulk CSV Generator Panel (Hidden by Default) -->
+            <div id="panel-bulk" class="control-panel" style="display: none;">
+
+                <div class="panel-section">
+                    <h3 class="section-title">
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path
+                                d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
+                            <path
+                                d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
+                        </svg>
+                        Upload Students CSV
+                    </h3>
+
+                    <!-- Drag & Drop Area -->
+                    <div id="csv-zone" class="csv-dropzone" onclick="triggerCSVFileInput()">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+                        </svg>
+                        <p><strong>Click to upload</strong> or drag CSV here</p>
+                        <span>Format: Name, Course, Grade, Date</span>
+                        <input type="file" id="csv-file-input" class="hidden-file-input" accept=".csv,.txt"
+                            onchange="handleCSVFileSelect(event)">
+                    </div>
+
+                    <!-- Direct Text Box Backup -->
+                    <div class="form-group" style="margin-top: 10px;">
+                        <label for="csv-raw-text">Or Paste Student Rows (Comma Separated)</label>
+                        <textarea id="csv-raw-text" rows="5"
+                            placeholder="Aanya Sharma, HD Makeup Artistry, A+, 2026-05-29&#10;Sneha Kapoor, Professional Bridal Masterclass, A, 2026-05-28"
+                            style="resize: vertical;"></textarea>
+                    </div>
+
+                    <button class="btn-primary" onclick="parseRawCSV()">Parse & Load Students</button>
+                </div>
+
+                <!-- Bulk Queued Table -->
+                <div class="panel-section" id="bulk-list-section" style="display: none;">
+                    <h3 class="section-title">
+                        Students Queue (<span id="bulk-count">0</span>)
+                    </h3>
+                    <div class="bulk-table-container">
+                        <table class="bulk-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Course</th>
+                                    <th>Grade</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bulk-table-body">
+                                <!-- Appended dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div style="display: flex; gap: 8px;">
+                        <button class="btn-primary" style="flex: 1;" onclick="processBulkCertificates()">
+                            Download All PDF
+                        </button>
+                        <button class="btn-danger" onclick="clearBulkQueue()" title="Clear Queue">
+                            Clear
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+        </aside>
+
+        <!-- Right Column: Canvas Live Preview Workspace -->
+        <main class="preview-workspace">
+
+            <!-- Scaling A4 Landscape Frame -->
+            <div class="certificate-scaler-container">
+
+                <!-- Absolute dimensions 1123px * 794px representing landscape A4 -->
+                <div id="certificate-to-print" class="certificate-container theme-light">
+
+                    <!-- Watermark patterns -->
+                    <div class="cert-watermark"></div>
+
+                    <!-- Luxury double lines gold border -->
+                    <div class="cert-outer-border"></div>
+                    <div class="cert-inner-border"></div>
+                    <div class="cert-accent-border"></div>
+
+                    <!-- Ornate golden corner flourishes (rendered as images to fix html2canvas bugs) -->
+                    <!-- Top Left -->
+                    <img class="cert-corner cert-corner-tl cert-corner-img" id="corner-tl" width="70" height="70" alt="" />
+                    <!-- Top Right -->
+                    <img class="cert-corner cert-corner-tr cert-corner-img" id="corner-tr" width="70" height="70" alt="" />
+                    <!-- Bottom Left -->
+                    <img class="cert-corner cert-corner-bl cert-corner-img" id="corner-bl" width="70" height="70" alt="" />
+                    <!-- Bottom Right -->
+                    <img class="cert-corner cert-corner-br cert-corner-img" id="corner-br" width="70" height="70" alt="" />
+
+                    <!-- Core Certificate Content Layout -->
+                    <div class="cert-content">
+
+                        <!-- Top Header Storefront Logo -->
+                        <div class="cert-header">
+                            <h1 class="cert-academy-title">Velvéra</h1>
+                            <h2 class="cert-academy-sub">Makeup Academy</h2>
+                        </div>
+
+                        <!-- Body Text Layout matching framed example -->
+                        <div class="cert-body-wrapper">
+                            <div class="cert-badge-type" style="margin-bottom: 2px;">Certificate of Achievement</div>
+                            <div class="cert-subtitle" style="margin-top: 2px;">This award certificate is presented to
+                            </div>
+                            <div class="cert-student-name" id="view-student-name">THEEPIREDDY LASYA REDDY</div>
+                            <div class="cert-connect-text"
+                                style="font-size: 0.75rem; text-transform: uppercase; font-style: italic; letter-spacing: 2px; opacity: 0.8; font-weight: 500; margin: 6px 0;">
+                                For completing the</div>
+                            <div class="cert-course-name" id="view-course-name">Professional Makeup and Hair Course
+                            </div>
+                            <div class="cert-subtitle" id="view-grade-wrapper" style="display: none; margin-top: 4px;">
+                                With a Grade of <strong id="view-grade"></strong></div>
+                        </div>
+
+                        <!-- Footer Row (ID, Stamp, Signatures) -->
+                        <div class="cert-footer">
+
+                            <!-- Left: Date & ID -->
+                            <div class="cert-footer-col">
+                                <div class="cert-signature-area"
+                                    style="height: 48px; display: flex; align-items: flex-end; justify-content: center;">
+                                    <div class="cert-meta-value" id="view-date"
+                                        style="font-family: var(--font-serif); font-size: 0.95rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;">
+                                        June, 2024</div>
+                                </div>
+                                <div class="cert-signature-line"
+                                    style="width: 170px; border-top: 1px solid var(--gold-solid); margin-top: 2px;">
+                                </div>
+                                <div class="cert-meta-label"
+                                    style="font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600; color: var(--gold-solid);">
+                                    Date</div>
+
+                                <div style="margin-top: 10px;" class="cert-footer-meta">
+                                    <div class="cert-meta-label"
+                                        style="font-size: 0.55rem; opacity: 0.5; letter-spacing: 1px; text-transform: uppercase; margin-top: 5px;">
+                                        ID: <span id="view-id"
+                                            style="font-family: monospace; font-weight: 600;">VMA-2024-0612</span></div>
+                                </div>
+                            </div>
+
+                            <!-- Center: QR Code & Seals -->
+                            <div class="cert-center-badges">
+                                <div class="cert-qr-wrapper"
+                                    style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                                    <div class="cert-qr-title"
+                                        style="font-family: var(--font-serif); font-size: 0.42rem; font-weight: 700; color: var(--gold-solid); letter-spacing: 0.5px; opacity: 0.95;">
+                                        SCAN TO VERIFY</div>
+                                    <div class="cert-qr-container" title="Click to verify this certificate"
+                                        onclick="testVerificationPage()">
+                                        <img id="qr-canvas" class="cert-qr-img" alt="QR Code" />
+                                    </div>
+                                </div>
+                                <div class="cert-badge-stamps">
+                                    <span class="cert-badge-stamp-item" id="stamp-iso">
+                                        <svg class="stamp-icon" width="12" height="12" viewBox="0 0 16 16">
+                                            <path
+                                                d="M5.338 1.59a.5.5 0 0 1 .324.614L5.178 3.896c.24.168.496.349.76.541l.732-2.196a.5.5 0 0 1 .949.316l-.68 2.04c.321.267.653.555.992.863l1.196-1.795a.5.5 0 0 1 .832.554l-1.077 1.616c.319.314.636.643.948.984l1.642-1.232a.5.5 0 1 1 .6.8l-1.468 1.101c.29.356.568.727.83 1.11z" />
+                                            <path
+                                                d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                                        </svg>
+                                        ISO Certified <strong>9001:2015</strong>
+                                    </span>
+                                    <span class="cert-badge-stamp-item" id="stamp-accreditation">
+                                        <svg class="stamp-icon" width="12" height="12" viewBox="0 0 16 16">
+                                            <path
+                                                d="M10.067.87a2.89 2.89 0 0 0-4.134 0l-.622.622-.89-.011a2.89 2.89 0 0 0-2.924 2.924l.01 1.09-.711.712a2.89 2.89 0 0 0 0 4.134l.712.712-.01 1.09a2.89 2.89 0 0 0 2.924 2.924l.89-.01.622.621a2.89 2.89 0 0 0 4.134 0l.622-.622.89.01a2.89 2.89 0 0 0 2.924-2.924l-.01-1.09.711-.712a2.89 2.89 0 0 0 0-4.134l-.712-.712.01-1.09a2.89 2.89 0 0 0-2.924-2.924l-.89.01-.622-.621zM8 4c.9 0 1.62.72 1.62 1.62S8.9 7.24 8 7.24s-1.62-.72-1.62-1.62S7.1 4 8 4zm0 4.5c2.2 0 4 1.8 4 4v.5H4v-.5c0-2.2 1.8-4 4-4z" />
+                                        </svg>
+                                        Globally Accredited
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Right: Dynamic Signatures -->
+                            <div class="cert-footer-col">
+                                <div class="cert-signature-area">
+                                    <div class="cert-signature-fallback" id="view-signature-1">Lasya Reddy</div>
+                                </div>
+                                <div class="cert-signature-line"></div>
+                                <div class="cert-signature-title" id="view-director-1">Founder & Master Educator</div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Toolbar Overlay Panel -->
+            <div class="preview-toolbar">
+                <button class="btn-secondary" style="padding: 6px 12px; font-size: 0.75rem;" onclick="adjustZoom(-0.1)"
+                    title="Zoom Out">
+                    A-
+                </button>
+                <div class="zoom-indicator" id="zoom-value">Zoom: 70%</div>
+                <button class="btn-secondary" style="padding: 6px 12px; font-size: 0.75rem;" onclick="adjustZoom(0.1)"
+                    title="Zoom In">
+                    A+
+                </button>
+                <button class="btn-secondary" style="padding: 6px 12px; font-size: 0.75rem;" onclick="fitToWidth()"
+                    title="Fit to screen width">
+                    Fit Screen
+                </button>
+
+                <div style="width: 1px; height: 20px; background: rgba(255,255,255,0.1); margin: 0 5px;"></div>
+
+                <!-- Interactive Action Buttons -->
+                <button class="btn-secondary" onclick="exportAsPNG()" style="gap: 5px;">
+                    Export PNG
+                </button>
+                <button class="btn-primary" onclick="exportAsPDF()"
+                    style="padding: 8px 16px; font-size: 0.8rem; gap: 5px;">
+                    Download Print PDF
+                </button>
+                <button class="btn-secondary" onclick="testVerificationPage()"
+                    style="gap: 5px; border-color: rgba(191, 149, 63, 0.4); color: var(--gold-solid);">
+                    Verify Status
+                </button>
+            </div>
+
+        </main>
+
+    </div>
+
+    <!-- Global Toast Notification Element -->
+    <div id="toast-notif" class="toast">
+        <svg class="toast-icon" viewBox="0 0 16 16">
+            <path
+                d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+        </svg>
+        <span id="toast-message">Action completed successfully.</span>
+    </div>
+
+    <!-- Core App Logic -->
+    <script src="script.js?v=2"></script>
+</body>
+
+</html>

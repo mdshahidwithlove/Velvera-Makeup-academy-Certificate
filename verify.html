@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Velvéra Makeup Academy - Credential Verification Portal</title>
+    
+    <!-- Premium Fonts -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <style>
+        /* Custom styles specific to the Verification Portal, extending styles.css */
+        body {
+            background-color: #050507;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+            min-height: 100vh;
+        }
+
+        .verify-card {
+            background: rgba(22, 22, 28, 0.7);
+            border: 1px solid var(--border-gold);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 18px;
+            padding: 2.5rem;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8), var(--shadow-gold);
+            animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .badge-verified {
+            width: 90px;
+            height: 90px;
+            margin: 0 auto 1.5rem;
+            animation: scaleIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes scaleIn {
+            0% { transform: scale(0); opacity: 0; }
+            70% { transform: scale(1.15); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .badge-verified-svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 0 15px rgba(191, 149, 63, 0.6));
+        }
+
+        .portal-header {
+            margin-bottom: 2rem;
+        }
+
+        .portal-title {
+            font-family: var(--font-serif);
+            font-size: 1.6rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            background: var(--gold-metallic);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: var(--gold-solid);
+            margin-bottom: 6px;
+        }
+
+        .portal-subtitle {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        /* Certificate details sheet table styling */
+        .details-table {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--border-glass);
+            border-radius: 12px;
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-bottom: 2rem;
+            text-align: left;
+            overflow: hidden;
+        }
+
+        .details-table tr:not(:last-child) td {
+            border-bottom: 1px solid var(--border-glass);
+        }
+
+        .details-table td {
+            padding: 14px 18px;
+            font-size: 0.85rem;
+        }
+
+        .details-table td.label-col {
+            font-weight: 600;
+            color: var(--gold-solid);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            width: 40%;
+            background: rgba(255, 255, 255, 0.01);
+        }
+
+        .details-table td.value-col {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #34d399;
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.1);
+        }
+
+        .status-badge.error {
+            background: rgba(239, 68, 68, 0.15);
+            border-color: rgba(239, 68, 68, 0.3);
+            color: #f87171;
+        }
+
+        .verified-accreditation {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            border-top: 1px solid var(--border-glass);
+            padding-top: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .accred-icon {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 500;
+        }
+
+        .accred-icon svg {
+            width: 14px;
+            height: 14px;
+            fill: var(--gold-solid);
+        }
+
+        /* Search input view */
+        .search-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 1.5rem;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--border-glass);
+            border-radius: 30px;
+            padding: 4px 6px 4px 18px;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .search-box:focus-within {
+            border-color: var(--gold-1);
+            box-shadow: var(--shadow-gold);
+        }
+
+        .search-box input {
+            background: transparent;
+            border: none;
+            color: white;
+            padding: 8px 0;
+            flex: 1;
+            font-size: 0.9rem;
+            font-family: var(--font-sans);
+        }
+
+        .search-box input:focus {
+            outline: none;
+            box-shadow: none;
+        }
+
+        .search-box button {
+            background: var(--gold-metallic);
+            border: none;
+            color: var(--bg-dark);
+            font-weight: 700;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .search-box button:hover {
+            transform: scale(1.03);
+            filter: brightness(1.1);
+        }
+
+        /* Camera Scanner Simulation */
+        .scanner-sim-box {
+            position: relative;
+            background: #000;
+            border: 1.5px dashed var(--gold-1);
+            border-radius: 12px;
+            height: 200px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            gap: 12px;
+            margin-top: 15px;
+            cursor: pointer;
+        }
+
+        .scanner-laser {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--gold-2), var(--gold-1), var(--gold-2), transparent);
+            box-shadow: 0 0 10px var(--gold-1);
+            animation: laserSweep 2s linear infinite;
+        }
+
+        @keyframes laserSweep {
+            0% { top: 0%; }
+            50% { top: 100%; }
+            100% { top: 0%; }
+        }
+
+        .scanner-sim-box svg {
+            width: 44px;
+            height: 44px;
+            fill: rgba(191, 149, 63, 0.4);
+            transition: fill 0.3s ease;
+        }
+
+        .scanner-sim-box:hover svg {
+            fill: var(--gold-solid);
+        }
+        
+        .scanner-sim-box p {
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            font-weight: 500;
+            z-index: 10;
+        }
+
+        /* Verification status animations */
+        .verification-loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            padding: 2rem 0;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(191, 149, 63, 0.1);
+            border-radius: 50%;
+            border-top-color: var(--gold-1);
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Graduate Photo display on verification sheet */
+        .db-photo-frame-wrapper {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            animation: fadeIn 0.8s ease;
+        }
+
+        .db-photo-frame {
+            width: 130px;
+            height: 170px;
+            border: 2px double var(--gold-solid);
+            padding: 5px;
+            background: rgba(0,0,0,0.3);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .db-photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border: 1px solid rgba(191, 149, 63, 0.2);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="verify-card">
+        
+        <!-- Top Title Header -->
+        <div class="portal-header" style="display: flex; flex-direction: column; align-items: center; gap: 8px; margin-bottom: 2rem;">
+            <svg viewBox="0 0 100 100" width="70" height="70" style="filter: drop-shadow(0 2px 6px rgba(191, 149, 63, 0.35)); overflow: visible;">
+                <g fill="url(#goldGradientVerify)">
+                    <path d="M 45,82 C 40,82 35,78 32,72 C 28,64 27,52 30,40 C 31,34 33,28 36,23 C 37,21 39,21 40,23 C 41,25 41,27 39,29 C 36,34 35,39 34,44 C 31,54 32,63 35,69 C 37,74 41,77 45,77 C 47,77 48,79 48,80 C 48,81 47,82 45,82 Z"/>
+                    <path d="M 33,70 C 29,71 25,69 24,66 C 23,63 26,59 30,58 C 31,58 32,59 32,60 C 32,61 31,62 30,62 C 28,63 26,65 27,66 C 27,67 30,68 33,66 C 34,66 35,67 35,68 C 35,69 34,70 33,70 Z"/>
+                    <polygon points="50,15 78,31 78,63 50,79 22,63 22,31" fill="none" stroke="url(#goldGradientVerify)" stroke-width="3" stroke-linejoin="round"/>
+                    <path d="M 40,32 L 43,39 L 50,34 L 57,39 L 60,32 L 56,35 L 50,29 L 44,35 Z"/>
+                    <path d="M 37,42 H 45 L 50,58 L 55,42 H 63 L 52,67 H 48 Z"/>
+                </g>
+                <defs>
+                    <linearGradient id="goldGradientVerify" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#AA771C"/>
+                        <stop offset="50%" stop-color="#FCF6BA"/>
+                        <stop offset="100%" stop-color="#BF953F"/>
+                    </linearGradient>
+                </defs>
+            </svg>
+            <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+                <h1 class="portal-title" style="margin-bottom: 2px;">Velvéra Makeup Academy</h1>
+                <div class="portal-subtitle">Global Credential Validation Portal</div>
+            </div>
+        </div>
+
+        <!-- 1. LOADING SCREEN -->
+        <div id="view-loading" class="verification-loading" style="display: none;">
+            <div class="spinner"></div>
+            <p style="font-size: 0.85rem; letter-spacing: 1px; color: var(--text-muted);">Authenticating secure registry record...</p>
+        </div>
+
+        <!-- 2. SUCCESS SCREEN: Credential Validated -->
+        <div id="view-success" style="display: none;">
+            
+            <!-- Elegant Gold Stamp Shield -->
+            <div class="badge-verified">
+                <svg class="badge-verified-svg" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="45" fill="none" stroke="var(--gold-solid)" stroke-width="2.5"/>
+                    <circle cx="50" cy="50" r="40" fill="none" stroke="var(--gold-solid)" stroke-width="0.8" stroke-dasharray="3 3"/>
+                    <path d="M50 20 L62 30 L59 45 L50 35 L41 45 L38 30 Z" fill="var(--gold-solid)" opacity="0.8"/>
+                    <path d="M35 50 L45 60 L68 37" fill="none" stroke="var(--gold-solid)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+
+            <div style="margin-bottom: 1.5rem;">
+                <span class="status-badge">
+                    <svg width="12" height="12" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                    </svg>
+                    Validated ISO-9001 Status
+                </span>
+            </div>
+
+            <p style="font-size: 0.9rem; margin-bottom: 1.5rem; font-weight: 300; line-height: 1.6; color: var(--text-muted);">
+                This official credential has been <strong style="color: white; font-weight: 600;">authenticated</strong> by Velvéra Makeup Academy registry database. The student details are listed below:
+            </p>
+
+            <!-- Graduate Photograph Display (rendered dynamically) -->
+            <div id="db-photo-container" class="db-photo-frame-wrapper" style="display: none;">
+                <div class="db-photo-frame">
+                    <img id="db-photo-img" src="" alt="Graduate Portrait">
+                </div>
+            </div>
+
+            <!-- Student Details Sheet -->
+            <table class="details-table">
+                <tr>
+                    <td class="label-col">Graduate Name</td>
+                    <td class="value-col" id="db-name">Aanya Sharma</td>
+                </tr>
+                <tr>
+                    <td class="label-col">Course Name</td>
+                    <td class="value-col" id="db-course">Professional Bridal Makeup Masterclass</td>
+                </tr>
+                <tr>
+                    <td class="label-col">Grade / Merit</td>
+                    <td class="value-col" id="db-grade">Grade A+</td>
+                </tr>
+                <tr>
+                    <td class="label-col">Date of Issue</td>
+                    <td class="value-col" id="db-date">May 29, 2026</td>
+                </tr>
+                <tr>
+                    <td class="label-col">Credential ID</td>
+                    <td class="value-col" style="font-family: monospace; font-size: 0.9rem; font-weight: 700; color: var(--gold-solid);" id="db-id">VMA-2026-0501</td>
+                </tr>
+            </table>
+
+            <div style="display: flex; gap: 10px;">
+                <button class="btn-primary" style="flex: 1;" onclick="window.print()">
+                    Print Validation Transcript
+                </button>
+                <button class="btn-secondary" onclick="showSearchPanel()">
+                    Verify Another ID
+                </button>
+            </div>
+            
+        </div>
+
+        <!-- 3. EXPIRED / FAILED / SEARCH PANEL VIEW -->
+        <div id="view-search">
+            
+            <div id="search-error-msg" style="display: none; margin-bottom: 1.5rem;">
+                <span class="status-badge error">
+                    Certificate ID Not Found
+                </span>
+                <p style="font-size: 0.8rem; color: #fca5a5; margin-top: 8px;">
+                    The ID was not found in the academy's official graduation databases. Please double check the ID.
+                </p>
+            </div>
+
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem; line-height: 1.5;">
+                Enter a Certificate ID below (printed at the bottom left of the certificate, e.g. <strong style="color: var(--gold-solid);">VMA-2026-0501</strong>) to check graduation validity and accreditation status.
+            </p>
+
+            <div class="search-container">
+                <div class="search-box">
+                    <input type="text" id="manual-search-id" placeholder="Enter Certificate ID (e.g. VMA-2026-0501)" onkeydown="if(event.key === 'Enter') queryIDManually()">
+                    <button onclick="queryIDManually()">Search</button>
+                </div>
+                
+                <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 600; letter-spacing: 2px;">
+                    — Or Simulator —
+                </div>
+
+                <!-- QR Scanner Simulation Box -->
+                <div class="scanner-sim-box" onclick="simulateQRScanner()">
+                    <div class="scanner-laser"></div>
+                    <svg viewBox="0 0 16 16">
+                        <path d="M0 .5A.5.5 0 0 1 .5 0h3a.5.5 0 0 1 0 1H1v2.5a.5.5 0 0 1-1 0v-3Zm12 0a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0V1h-2.5a.5.5 0 0 1-.5-.5ZM.5 12a.5.5 0 0 1 .5.5V15h2.5a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5v-3a.5.5 0 0 1 .5-.5Zm15 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1 0-1H15v-2.5a.5.5 0 0 1 .5-.5ZM4 4h1v1H4V4Z"/>
+                        <path d="M7 2H2v5h5V2ZM3 3h3v3H3V3Zm2 8H4v1h1v-1Z"/>
+                        <path d="M7 9H2v5h5V9ZM3 10h3v3H3v-3Zm8-6h1v1h-1V4Z"/>
+                        <path d="M9 2h5v5H9V2Zm1 1h3v3h-3V3Zm2 8h2v1h-2v-1Z"/>
+                        <path d="M9 9h2v1H9V9Zm3 0h2v1h-2V9Zm-2 3h2v1h-2v-1Zm3 1h1v2h-1v-2Zm-3 2h2v1H9v-1Zm4-3h1v1h-1v-1Zm-1 1h-1v1h1v-1Z"/>
+                    </svg>
+                    <p>Simulate QR Scan Camera</p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Global Accreditation Logos Footer -->
+        <div class="verified-accreditation">
+            <div class="accred-icon">
+                <svg viewBox="0 0 16 16"><path d="M5.338 1.59a.5.5 0 0 1 .324.614L5.178 3.896c.24.168.496.349.76.541l.732-2.196a.5.5 0 0 1 .949.316l-.68 2.04c.321.267.653.555.992.863l1.196-1.795a.5.5 0 0 1 .832.554l-1.077 1.616c.319.314.636.643.948.984l1.642-1.232a.5.5 0 1 1 .6.8l-1.468 1.101c.29.356.568.727.83 1.11z"/></svg>
+                ISO 9001:2015
+            </div>
+            <div class="accred-icon">
+                <svg viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/></svg>
+                IAF Accredited
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Scripting for database parsing -->
+    <script>
+        const els = {
+            viewLoading: document.getElementById('view-loading'),
+            viewSuccess: document.getElementById('view-success'),
+            viewSearch: document.getElementById('view-search'),
+            manualSearchId: document.getElementById('manual-search-id'),
+            searchErrorMsg: document.getElementById('search-error-msg'),
+            
+            // Success details
+            dbName: document.getElementById('db-name'),
+            dbCourse: document.getElementById('db-course'),
+            dbGrade: document.getElementById('db-grade'),
+            dbDate: document.getElementById('db-date'),
+            dbId: document.getElementById('db-id')
+        };
+
+        // On load, parse URL parameter ?id=VMA-XXXXXXXX
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const certID = urlParams.get('id');
+            
+            if (certID) {
+                queryID(certID);
+            } else {
+                showSearchPanel();
+            }
+        });
+
+        // Search panel navigation
+        function showSearchPanel() {
+            els.viewLoading.style.display = 'none';
+            els.viewSuccess.style.display = 'none';
+            els.viewSearch.style.display = 'block';
+            els.searchErrorMsg.style.display = 'none';
+            els.manualSearchId.value = '';
+            
+            // Reset query string in address bar without refreshing page
+            const cleanURL = window.location.origin + window.location.pathname;
+            window.history.replaceState({}, document.title, cleanURL);
+        }
+
+        // Query certificate ID against local storage mockup or URL params
+        function queryID(id) {
+            els.viewSearch.style.display = 'none';
+            els.viewLoading.style.display = 'flex';
+            els.viewSuccess.style.display = 'none';
+            
+            // Introduce a subtle 800ms loading pause for maximum secure realism (trustworthy)
+            setTimeout(() => {
+                const urlParams = new URLSearchParams(window.location.search);
+                const nParam = urlParams.get('n');
+                const cParam = urlParams.get('c');
+                const dParam = urlParams.get('d');
+                
+                let cert = null;
+                
+                // If URL parameters contain validation data, use them (stateless verification for mobile scanners)
+                if (nParam && cParam) {
+                    cert = {
+                        id: id.trim().toUpperCase(),
+                        name: nParam,
+                        course: cParam,
+                        date: dParam || new Date().toISOString()
+                    };
+                } else {
+                    // Fallback to local storage database for local PC verification
+                    const dbKey = 'vma_certificates';
+                    let db = [];
+                    
+                    try {
+                        const stored = localStorage.getItem(dbKey);
+                        if (stored) {
+                            db = JSON.parse(stored);
+                        }
+                    } catch (e) {
+                        console.error(e);
+                    }
+                    
+                    cert = db.find(item => item.id.toUpperCase() === id.trim().toUpperCase());
+                }
+                
+                if (cert) {
+                    // Populate detail views
+                    els.dbName.textContent = cert.name;
+                    els.dbCourse.textContent = cert.course;
+                    els.dbGrade.textContent = cert.grade || 'Completed';
+                    
+                    const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+                    els.dbDate.textContent = new Date(cert.date).toLocaleDateString('en-US', dateOptions);
+                    els.dbId.textContent = cert.id;
+                    
+                    // Render portrait if exists
+                    const photoBox = document.getElementById('db-photo-container');
+                    const photoImg = document.getElementById('db-photo-img');
+                    if (photoBox && photoImg) {
+                        if (cert.photo) {
+                            photoImg.src = cert.photo;
+                            photoBox.style.display = 'flex';
+                        } else {
+                            photoBox.style.display = 'none';
+                        }
+                    }
+                    
+                    // Show success
+                    els.viewLoading.style.display = 'none';
+                    els.viewSuccess.style.display = 'block';
+                    
+                } else {
+                    // Show failure
+                    els.viewLoading.style.display = 'none';
+                    els.viewSearch.style.display = 'block';
+                    els.searchErrorMsg.style.display = 'block';
+                    els.manualSearchId.value = id;
+                }
+            }, 850);
+        }
+
+        // Action: Submit manual ID search
+        function queryIDManually() {
+            const id = els.manualSearchId.value.trim();
+            if (id) {
+                queryID(id);
+            }
+        }
+
+        // Action: Simulate camera scanning
+        function simulateQRScanner() {
+            els.viewSearch.style.display = 'none';
+            els.viewLoading.style.display = 'flex';
+            
+            // Fake scanner reads a demo certificate record and loads it
+            setTimeout(() => {
+                // Ensure a demo record is inside localStorage if DB is currently empty
+                const dbKey = 'vma_certificates';
+                let db = [];
+                try {
+                    const stored = localStorage.getItem(dbKey);
+                    if (stored) db = JSON.parse(stored);
+                } catch (e) {}
+                
+                const demoID = "VMA-2026-0501";
+                const hasDemo = db.some(item => item.id === demoID);
+                
+                if (!hasDemo) {
+                    const demoCert = {
+                        id: demoID,
+                        name: "Aanya Sharma",
+                        course: "Professional Bridal Makeup Masterclass",
+                        grade: "Grade A+",
+                        date: "2026-05-29",
+                        director1: "Vera Smith",
+                        director2: "Elena Gomez",
+                        theme: "dark",
+                        iso: true,
+                        accreditation: true,
+                        photo: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='%238b6508'><circle cx='50' cy='35' r='18'/><path d='M25 80 C25 55, 35 55, 50 55 C65 55, 75 55, 75 80 Z'/></svg>" // Default silhouette SVG
+                    };
+                    db.push(demoCert);
+                    localStorage.setItem(dbKey, JSON.stringify(db));
+                }
+                
+                queryID(demoID);
+            }, 1200);
+        }
+    </script>
+</body>
+</html>
